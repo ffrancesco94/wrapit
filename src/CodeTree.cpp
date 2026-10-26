@@ -1739,8 +1739,9 @@ CodeTree::register_type(const CXType& type, int* pItype, int* pIenum){
       auto underlying_base_type = base_type(clang_getTypedefDeclUnderlyingType(c));
       return register_type(underlying_base_type);
     } else if(type0.kind == CXType_Elaborated){
-      auto elab_type =  static_cast<const clang::ElaboratedType*>(type0.data[0]);
-      std::cerr << "\t named type: " << elab_type->getNamedType().getAsString() << "\n";
+      // clang >= 22 no longer exposes clang::ElaboratedType; use the public
+      // C API spelling instead (debug output only).
+      std::cerr << "\t named type: " << type0 << "\n";
     } else{
       std::cerr << "Warning: type '" << type0 << "' is of the unsupported kind '"
                 << clang_getTypeKindSpelling(type0.kind)
